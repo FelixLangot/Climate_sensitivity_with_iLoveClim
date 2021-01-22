@@ -36,16 +36,16 @@ print(data)
 print(data.variables['ts'])
 # On créer de nouvelles variables à partir des données pour les manipuler plus facilement dans Python
 
-Ts = data.variables['ts'][:] 
+Ts = data.variables['ts'][:]
 
-lon = data.variables['lon'][:] 
+lon = data.variables['lon'][:]
 lat = data.variables['lat'][:]
 
 ############################# TEMPERATURE 1D ###################################
 print('#######################################################################')
 print('Evolution de la temperature a la surface en (0,0) sur 1000 ans')
 print('#######################################################################')
-      
+
 Tsloc = Ts[:,0,0]
 
 t = np.arange(0,1000)
@@ -65,7 +65,7 @@ print('#######################################################################')
 Tsevol = np.zeros((1000,1))
 for i in np.arange(0,1000):
     Tsevol[i] = np.mean(Ts[i,:,:])
-    
+
 Tsevol2 = spatialmean(Ts, lat)
 
 plt.plot(t,Tsevol,linewidth=1)
@@ -94,7 +94,7 @@ if GifQ == 'y':
         map = Basemap(projection='merc',llcrnrlon=-180.,llcrnrlat=-80.,
                   urcrnrlon=180.,urcrnrlat=80.,resolution='c')
 
-        lons,lats= np.meshgrid(lon-180,lat) 
+        lons,lats= np.meshgrid(lon-180,lat)
 
         x,y = map(lons,lats)
         # Carte de la variable
@@ -118,7 +118,7 @@ if GifQ == 'n':
     map = Basemap(projection='merc',llcrnrlon=-180.,llcrnrlat=-80.,
                   urcrnrlon=180.,urcrnrlat=80.,resolution='c')
 
-    lons,lats= np.meshgrid(lon-180,lat) 
+    lons,lats= np.meshgrid(lon-180,lat)
 
     x,y = map(lons,lats)
     # Carte de la variable
@@ -137,7 +137,5 @@ if GifQ == 'n':
 # Sauvegarde
 #    plt.savefig("CTRL_Figs/Graph" + str(i) +".png", format='PNG')
     plt.show()
-    
 
-
-
+#GitTest
