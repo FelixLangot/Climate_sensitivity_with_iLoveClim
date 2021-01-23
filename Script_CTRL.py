@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
+#%%
+
 import os
 
 os.environ['PROJ_LIB'] = '/Applications/anaconda3/pkgs/proj4-5.2.0-h0a44026_1/share/proj'
@@ -12,9 +14,6 @@ from netCDF4 import Dataset
 from mpl_toolkits.basemap import Basemap
 from scipy.stats import linregress
 
-import os
-
-os.environ['PROJ_LIB'] = '/Applications/anaconda3/pkgs/proj4-5.2.0-h0a44026_1/share/proj'
 
 def spatialmean(V,lat):		# lat: vecteur 1D des lattitudes
     R = np.mean(V,2) 		# Moyenne sur les longitudes (non pondérée)
@@ -29,7 +28,7 @@ def spatialmean(V,lat):		# lat: vecteur 1D des lattitudes
 
 ##### Récupération et observation des variables des fichiers netcdf #####
 # Récupération des données du fichier fichier.nc dans la structure data
-data = Dataset('felixlangot-CTRL-YR.nc')
+data = Dataset('/Users/felixlangot/Documents/GitHub/TD_iLoveClim/felixlangot-CTRL-YR.nc')
 # On  regarde les variables contenues dans data et la variable variable
 print("data:")
 print(data)
@@ -86,6 +85,9 @@ plt.show()
 
 ############################# TEMPERATURE 2D ###################################
 
+print('#######################################################################')
+print('Evolution de la temperature 2D')
+print('#######################################################################')
 GifQ = input('Do you want to create a .gif ? (y or n) ')
 
 if GifQ == 'y':
@@ -139,3 +141,5 @@ if GifQ == 'n':
     plt.show()
 
 #GitTest
+
+# %%
