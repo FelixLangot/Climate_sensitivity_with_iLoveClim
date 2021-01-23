@@ -51,7 +51,7 @@ plt.plot(t,Tsloc,'b-', linewidth=1, label='legende')	# Plot 1D de z en fonction 
 plt.xlabel('$t$ (unité de t)', fontsize=20)			# Axe des abscisses
 plt.ylabel('$T$ (K)', fontsize=20)			        # Axe des ordonnées
 #legend = plt.legend(loc='upper center', shadow=True)		# Position et style de légende
-plt.savefig('figure.eps', format='eps', dpi=600)		# Sauvegarder la figure au format eps
+#plt.savefig('figure.eps', format='eps', dpi=600)		# Sauvegarder la figure au format eps
 plt.show()
 
 print('#######################################################################')
@@ -69,7 +69,7 @@ plt.title('Temperature with np.mean loop', fontsize=20)					# Titre
 plt.xlabel('$t$ (yr)', fontsize=20)			# Axe des abscisses
 plt.ylabel('$T$ (K)', fontsize=20)			        # Axe des ordonnées
 #legend = plt.legend(loc='upper center', shadow=True)		# Position et style de légende
-plt.savefig('figure.eps', format='eps', dpi=600)		# Sauvegarder la figure au format eps
+#plt.savefig('figure.eps', format='eps', dpi=600)		# Sauvegarder la figure au format eps
 plt.show()
 
 plt.plot(t,Tsevol2,linewidth=1)
@@ -77,7 +77,7 @@ plt.title('Temperature with spatialmean', fontsize=20)					# Titre
 plt.xlabel('$t$ (yr)', fontsize=20)			# Axe des abscisses
 plt.ylabel('$T$ (K)', fontsize=20)			        # Axe des ordonnées
 #legend = plt.legend(loc='upper center', shadow=True)		# Position et style de légende
-plt.savefig('figure.eps', format='eps', dpi=600)		# Sauvegarder la figure au format eps
+#plt.savefig('figure.eps', format='eps', dpi=600)		# Sauvegarder la figure au format eps
 plt.show()
 
 ############################# TEMPERATURE 2D ###################################
