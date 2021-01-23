@@ -1,5 +1,5 @@
 #%%
-
+%matplotlib inline
 import os
 
 os.environ['PROJ_LIB'] = '/Applications/anaconda3/pkgs/proj4-5.2.0-h0a44026_1/share/proj'
@@ -23,10 +23,11 @@ def spatialmean(V,lat):		# lat: vecteur 1D des lattitudes
     R = np.sum(Rtemp,1)		# Retourne R, la variable V moyennée spatiallement en fonction du temps (R est un vecteur 1D)
     return R
 
+
 ##### Récupération et observation des variables des fichiers netcdf #####
 # Récupération des données du fichier fichier.nc dans la structure data
-data = Dataset('/Users/felixlangot/Documents/GitHub/TD_iLoveClim/felixlangot-CTRL-YR.nc')
-# On  regarde les variables contenues dans data et la variable variable
+data = Dataset("/Users/felixlangot/Google Drive (felixlangot@gmail.com)/UVSQ/Modeles_pour_l'etude_des_climats/TP_iLoveClim/felixlangot-CTRL-YR.nc")
+# On regarde les variables contenues dans data et la variable variable
 print("data:")
 print(data)
 print(data.variables['ts'])
