@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf8 -*-
-
 #%%
 
 import os
@@ -139,7 +136,5 @@ if GifQ == 'n':
 # Sauvegarde
 #    plt.savefig("CTRL_Figs/Graph" + str(i) +".png", format='PNG')
     plt.show()
-
-#GitTest
 
 # %%
