@@ -1,5 +1,9 @@
 #%%
+<<<<<<< HEAD
 
+=======
+%matplotlib inline
+>>>>>>> c74d077e5df3dd0a732efcd25c4dcedd395450cf
 import os
 
 os.environ['PROJ_LIB'] = '/Applications/anaconda3/pkgs/proj4-5.2.0-h0a44026_1/share/proj'
