@@ -1,5 +1,4 @@
 #%%
-%matplotlib inline
 
 import os
 
