@@ -344,23 +344,24 @@ plt.show()
 #%%
 
 #%%
+##################### Calculer le(s) changements de pentes #########################
 
-aa,bb,cc,dd,ee = np.polyfit(Tdiff, ΔN, 4)
-ΔNfit = aa*Tdiff**4 + bb*Tdiff**3 + cc*Tdiff**2 + dd*Tdiff + ee
-plt.scatter(Tdiff, ΔN, linewidth=1)
-plt.plot(Tdiff, ΔNfit, color='r')
+aa,bb,cc,dd,ee = np.polyfit(Tdiff, ΔN, 4)                          # On construit un polynome de degre 4 pour qu'il suive toutes les données
+ΔNfit = aa*Tdiff**4 + bb*Tdiff**3 + cc*Tdiff**2 + dd*Tdiff + ee    # On construit le fit a partir des coefficients du polynome 
+plt.scatter(Tdiff, ΔN, linewidth=1)                                # graph des données
+plt.plot(Tdiff, ΔNfit, color='r')                                  # graph du fit
 plt.show()
-dΔN = 4*aa*Tdiff**3 + 3*bb*Tdiff**3 + 2*cc*Tdiff + dd
-plt.scatter(Tdiff, dΔN, color='r')
-plt.plot( Tdiff, np.zeros((len(Tdiff))) )
+dΔN = 4*aa*Tdiff**3 + 3*bb*Tdiff**3 + 2*cc*Tdiff + dd              # On calcule la dérivée du fit pour identifier les changements de pente
+plt.scatter(Tdiff, dΔN, color='r')                                 # graph de la dérivée du fit
+plt.plot( Tdiff, np.zeros((len(Tdiff))) )                          # On trace une ligne en dΔN = 0
 plt.show()
 ilist = []
-for i in np.arange(0,len(Tdiff)):
+for i in np.arange(0,len(Tdiff)):                                  # On identifie quels éléments de dΔN sont supérieurs à 0 et on met leur indice dans une liste
     o = dΔN[i]
     if o > 0:
         ilist.append(i)
 ilist = np.asarray(ilist)
-midstart = np.min(ilist)
+midstart = np.min(ilist)                                           # On définit midstart et midstop comme étant les indices correspondant à l'endroit ou la pente est positive (au milieu du graph 1pcCO2)
 midstop = np.max(ilist)
 print(midstart, midstop)
 
@@ -368,19 +369,18 @@ print(midstart, midstop)
 
 #%%
 
-a,b = np.polyfit(Tdiff[0:midstart], ΔN[0:midstart], 1)
+a,b = np.polyfit(Tdiff[0:midstart], ΔN[0:midstart], 1)                             # On construit les fits séparés (des droites) avec les indices correspondant qu'on trouve avec la methode d'au-dessus     
 c,d = np.polyfit(Tdiff[midstart:midstop], ΔN[midstart:midstop], 1)
 e,f = np.polyfit(Tdiff[midstop:500], ΔN[midstop:500], 1)
 
-plt.plot(Tdiff[0:20], a*Tdiff[0:20] + b, linewidth=4, color='r')
+plt.plot(Tdiff[0:20], a*Tdiff[0:20] + b, linewidth=4, color='r')                   # On trace les données avec les fits
 plt.plot(Tdiff[20:100], c*Tdiff[20:100] + d, linewidth=4, color='g')
 plt.plot(Tdiff[100:500], e*Tdiff[100:500] + f, linewidth=4, color='y')
 plt.scatter(Tdiff, ΔN, linewidth=1)
 plt.title('DeltaN vs DeltaT', fontsize=20)	
-plt.xlabel('$\Delta T$ (K)', fontsize=20)				# Titre
-plt.ylabel('$\Delta N ~(W \cdot m^{-2})$', fontsize=20)			# Axe des abscisses		        # Axe des ordonnées
-#legend = plt.legend(loc='upper center', shadow=True)		# Position et style de légende
-# Sauvegarder la figure au format eps
+plt.xlabel('$\Delta T$ (K)', fontsize=20)				
+plt.ylabel('$\Delta N ~(W \cdot m^{-2})$', fontsize=20)				        
+#legend = plt.legend(loc='upper center', shadow=True)		
 plt.savefig('../Graph1D/DeltaN.eps', format='eps', dpi=600)
 plt.show()
 
