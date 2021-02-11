@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 from netCDF4 import Dataset
 from mpl_toolkits.basemap import Basemap
 from scipy.stats import linregress
+import matplotlib.colors as colors
 
 
 def spatialmean(V,lat):		# lat: vecteur 1D des lattitudes
@@ -26,6 +27,10 @@ def spatialmean(V,lat):		# lat: vecteur 1D des lattitudes
     R = np.sum(Rtemp,1)		# Retourne R, la variable V moyennée spatiallement en fonction du temps (R est un vecteur 1D)
     return R
 
+
+# Dark graph
+plt.style.use('dark_background')
+#plt.style.use('default')
 
 ##### Récupération et observation des variables des fichiers netcdf #####
 # Récupération des données du fichier fichier.nc dans la structure data
@@ -318,24 +323,29 @@ plt.show()
 #%%
 ######################## Questions TP #################################
 
+print(data.variables['tsr'])
+print(data.variables['ttr'])
+
+time = data2.variables['time'][:]
+
 TsrCTRL = data.variables['tsr'][:]
 TtrCTRL = data.variables['ttr'][:]
 
 Tsr1pcCO2 = data2.variables['tsr'][:]
 Ttr1pcCO2 = data2.variables['ttr'][:]
 
-NtCTRL = TsrCTRL[0:500] - TtrCTRL[0:500]
+NtCTRL = TsrCTRL - TtrCTRL
 Nt1pcCO2 = Ts1pcCO2 - Ttr1pcCO2
 
 NtmCTRL = spatialmean(NtCTRL, lat)
 Ntm1pcCO2 = spatialmean(Nt1pcCO2, lat)
 
-ΔN = Ntm1pcCO2 - np.mean(NtmCTRL[400:500])
+ΔN = Ntm1pcCO2 - np.mean(NtmCTRL[900:1000])
 
 plt.plot(t2, ΔN, linewidth=1)
-plt.title('Delta N', fontsize=20)					# Titre
-plt.xlabel('t ((yr)', fontsize=20)			# Axe des abscisses
-plt.ylabel('$N (W \cdot m^{-2}$)', fontsize=20)			        # Axe des ordonnées
+#plt.title('Delta N', fontsize=20)					# Titre
+plt.xlabel('t (yr)', fontsize=20)			# Axe des abscisses
+plt.ylabel('$\Delta N (W \cdot m^{-2}$)', fontsize=20)			        # Axe des ordonnées
 #legend = plt.legend(loc='upper center', shadow=True)		# Position et style de légende
 # Sauvegarder la figure au format eps
 plt.savefig('../Graph1D/DeltaN.eps', format='eps', dpi=600)
@@ -344,7 +354,7 @@ plt.show()
 #%%
 
 #%%
-##################### Calculer le(s) changements de pentes #########################
+# Calculer le(s) changement(s) de pente
 
 aa,bb,cc,dd,ee = np.polyfit(Tdiff, ΔN, 4)                          # On construit un polynome de degre 4 pour qu'il suive toutes les données
 ΔNfit = aa*Tdiff**4 + bb*Tdiff**3 + cc*Tdiff**2 + dd*Tdiff + ee    # On construit le fit a partir des coefficients du polynome 
@@ -368,23 +378,100 @@ print(midstart, midstop)
 #%%
 
 #%%
+# λc, Fc, ΔTc
 
 a,b = np.polyfit(Tdiff[0:midstart], ΔN[0:midstart], 1)                             # On construit les fits séparés (des droites) avec les indices correspondant qu'on trouve avec la methode d'au-dessus     
 c,d = np.polyfit(Tdiff[midstart:midstop], ΔN[midstart:midstop], 1)
 e,f = np.polyfit(Tdiff[midstop:500], ΔN[midstop:500], 1)
 
+ovrslope, ovrintercept = np.polyfit(Tdiff, ΔN, 1)
+
 plt.plot(Tdiff[0:20], a*Tdiff[0:20] + b, linewidth=4, color='r')                   # On trace les données avec les fits
 plt.plot(Tdiff[20:100], c*Tdiff[20:100] + d, linewidth=4, color='g')
 plt.plot(Tdiff[100:500], e*Tdiff[100:500] + f, linewidth=4, color='y')
-plt.scatter(Tdiff, ΔN, linewidth=1)
-plt.title('DeltaN vs DeltaT', fontsize=20)	
+plt.plot(Tdiff, ovrslope*Tdiff + ovrintercept, linewidth=4, color='b')
+plt.scatter(Tdiff, ΔN, c=time, marker='o')
+#plt.title('DeltaN vs DeltaT', fontsize=20)	
 plt.xlabel('$\Delta T$ (K)', fontsize=20)				
 plt.ylabel('$\Delta N ~(W \cdot m^{-2})$', fontsize=20)				        
-#legend = plt.legend(loc='upper center', shadow=True)		
-plt.savefig('../Graph1D/DeltaN.eps', format='eps', dpi=600)
+#legend = plt.legend(loc='upper center', shadow=True)
+plt.viridis()
+plt.savefig('../Graph1D/DeltaNvsDeltaT.eps', format='eps', dpi=600)
 plt.show()
 
-print("red slope = ", a)
-print("green slope = ", c)
-print("yellow slope = ", e)
+ΔTc = ovrintercept/(-ovrslope)
+
+print("RED")
+print("-slope = λ1 = ", -a)
+print("intercept = F1 = ", b)
+print("GREEN")
+print("-slope = λ2 = ", -c)
+print("intercept = F2 = ", d)
+print("YELLOW")
+print("-slope = λ3 = ", -e)
+print("intercept = F3 = ", f)
+print("BLUE")
+print('-overall slope = λc = ', -ovrslope)
+print('overall intecept = Fc = ', ovrintercept)
+print('change in temperature at equilibrium (mean over 500 yrs) = ΔTc = ', ΔTc)
+
 #%%
+
+#%%
+# λeq, Feq, ΔTeq
+
+Tdiffeq = Tdiff[400:500]
+ΔNeq = ΔN[400:500]
+time100 = time[400:500]
+
+slopeeq, intercepteq = np.polyfit(Tdiffeq, ΔNeq, 1)
+
+# On trace les données avec les fits
+
+plt.plot(Tdiffeq, slopeeq*Tdiffeq + intercepteq, linewidth=4, color='r')
+plt.scatter(Tdiffeq, ΔNeq, c=time100, marker='o')
+#plt.title('DeltaN vs DeltaT', fontsize=20)
+plt.xlabel('$\Delta T$ (K)', fontsize=20)
+plt.ylabel('$\Delta N ~(W \cdot m^{-2})$', fontsize=20)
+#legend = plt.legend(loc='upper center', shadow=True)
+plt.viridis()
+plt.savefig('../Graph1D/DeltaNvsDeltaTeq.eps', format='eps', dpi=600)
+plt.show()
+
+ΔTeq = intercepteq/(-slopeeq)
+
+print('λeq = ', -slopeeq)
+print('Feq = ', intercepteq)
+print('ΔTeq  = ', ΔTeq)
+
+
+#%%
+
+#%%
+# λr, Fr, ΔTr
+
+Tdiffr = Tdiff[0:100]
+ΔNr = ΔN[0:100]
+time100 = time[0:100]
+
+sloper, interceptr = np.polyfit(Tdiffr, ΔNr, 1)
+
+# On trace les données avec les fits
+
+plt.plot(Tdiffr, sloper*Tdiffr + interceptr, linewidth=4, color='r')
+plt.scatter(Tdiffr, ΔNr, c=time100, marker='o')
+#plt.title('DeltaN vs DeltaT', fontsize=20)
+plt.xlabel('$\Delta T$ (K)', fontsize=20)
+plt.ylabel('$\Delta N ~(W \cdot m^{-2})$', fontsize=20)
+#legend = plt.legend(loc='upper center', shadow=True)
+plt.viridis()
+plt.savefig('../Graph1D/DeltaNvsDeltaTr.eps', format='eps', dpi=600)
+plt.show()
+
+ΔTr = interceptr/(-sloper)
+
+print('λr = ', -sloper)
+print('Fr = ', interceptr)
+print('ΔTr  = ', ΔTr)
+
+# %%
