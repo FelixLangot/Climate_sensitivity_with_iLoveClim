@@ -3,4 +3,4 @@ w/ S. Vercelot &amp; A. Karsenti
 
 ## Content  
 - The main script is called Script_CTRL.py
-- The report is the .pdf file
+- Final report is the .pdf file
